@@ -1,0 +1,132 @@
+<html>
+<head>
+  <script src="https://derbyjs.github.io/derby-standalone/dist/0.6.0-alpha25/derby-standalone.min.js"></script>
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  <script src="http://underscorejs.org/underscore-min.js"></script>
+  <script src="./lib/mingo.min.js" charset="utf-8"></script>
+
+  <link href="index.css" rel="stylesheet" type="text/css">
+  <style>
+  </style>
+</head>
+<!-- we create a template to use as the body -->
+<script type="text/template" id="body">
+
+<h1>MongoDB Aggregation Explanations</h1>
+
+<div class="explain">
+  <p>
+  The MongoDB aggregation pipeline is a powerful tool with a powerful learning curve. This page attempts to explain the concepts involved by letting you play with some data.
+  </p>
+
+  <view is="intro"></view>
+
+</div>
+
+<div class="post">
+  explanation by <a href="https://twitter.com/enjalot">@enjalot</a> with <a href="http://derbyjs.com">DerbyJS</a>
+</div>
+
+</script>
+
+<script type="text/template" id="intro">
+  <div class="intro">
+  <p>
+    The aggregation pipeline essentially lets you count things in a collection.
+
+    So to explain how we aggregate with mongo we will need some sample data in a collection. 
+    <br><br>
+    Let us use XXX as our dataset, below is a sample of {{limit}} entries out of {{data.length}}. &nbsp;
+
+    We can also view the data as <a on-click="toggleTable()">
+      {{if useTable}}JSON{{else}}a Table{{/if}}
+    </a>.
+  </p>
+  <div class="intro-results">
+    
+    {{if useTable}}
+      <view is="result-table" data="{{filtered}}" keys="{{keys}}"></view>
+    {{else}}
+      <textarea class="json" wrap="off">{{filteredText}}</textarea>
+    {{/if}}
+  </div>
+
+  <p>
+    We can query our collection using the standard mongo query syntax. Try modifying the query below to see the results change above.
+  </p>
+ 
+
+  <br>
+
+  query json
+  limit
+
+  You can filter the data using a standard mongodb query
+
+  fields
+
+
+</div>
+
+</script>
+
+<script type="text/template" id="result-table">
+  <table class="results">
+    <thead>
+    <tr>
+      {{each keys as #key}}
+        <td>{{#key}}</td>
+      {{/each}}
+    </tr>
+    </thead>
+    <tbody>
+    {{each @data as #row}}
+      <tr>
+        {{each keys as #key}}
+          <td>{{#row[#key]}}</td>
+        {{/each}}
+      </tr>
+    {{/each}}
+    </tbody>
+  </table>
+</script>
+
+<script type="text/template" id="individual">
+  <div class="individual">
+
+<!--
+    <span class="sensor">
+      <selectah 
+        value="{{sensor}}" 
+        editing="{{editing.sensor}}"
+        options="{{sensors}}">
+      </selectah>
+    </span>
+-->
+
+  </div>
+
+</script>
+
+<script type="text/template" id="selectah" data-element="selectah">
+  <span on-key="key($event)">
+  {{if editing}}
+    <select as="select" on-change="selected()">
+      {{each options as #option}}
+      <option value={{#option}} selected="{{value == #option}}">{{#option}}</option>
+      {{/each}}
+    </select>
+  {{else}}
+    <span class="input" on-click="edit()">
+      {{value}}
+  </span>
+  {{/if}}
+  </span>
+</script>
+
+<body>
+</body>
+
+<script type="text/javascript" src="./data.js"></script>
+<script type="text/javascript" src="./index.js"></script>
+</html>
