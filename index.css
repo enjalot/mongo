@@ -26,6 +26,12 @@ h1 {
   outline: none;
   border: none;
 }
+.editor {
+  width: 100%;
+  height: 80px;
+  font-family: Courier, monospace;
+  font-size: 20px;
+}
 table.results {
   display: block;
   overflow: auto;
@@ -42,4 +48,11 @@ table.results td {
   width: 100%;
   height: 300px;
   overflow-y: scroll;
+}
+.key {
+  background: #eee;
+  margin: 5px;
+}
+a.example {
+  margin: 5px;
 }

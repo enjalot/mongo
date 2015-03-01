@@ -21,6 +21,8 @@
 
   <view is="intro"></view>
 
+  <h2>Aggregating</h2>
+
 </div>
 
 <div class="post">
@@ -36,7 +38,7 @@
 
     So to explain how we aggregate with mongo we will need some sample data in a collection. 
     <br><br>
-    Let us use XXX as our dataset, below is a sample of {{limit}} entries out of {{data.length}}. &nbsp;
+    Let us use XXX as our dataset, below is a sample of {{filtered.length}} entries out of {{data.length}}. &nbsp;
 
     We can also view the data as <a on-click="toggleTable()">
       {{if useTable}}JSON{{else}}a Table{{/if}}
@@ -51,23 +53,28 @@
     {{/if}}
   </div>
 
+  <h2>Filtering</h2>
   <p>
     We can query our collection using the standard mongo query syntax. Try modifying the query below to see the results change above.
   </p>
- 
-
+  <view is="json-editor" query="{{query}}"></view>
+  We limit the query to <input value="{{limit}}" size=3> results.
   <br>
-
-  query json
-  limit
-
-  You can filter the data using a standard mongodb query
-
-  fields
-
-
+  Try filtering on any of the keys available: 
+  {{each keys as #key}}
+    <span class="key">{{#key}} </span>
+  {{/each}}
+  <br>
+  Some example queries:
+  <a class="example" on-click="example1()">All entries</a> -
+  <a class="example" on-click="example2()">foo</a> - 
+  <a class="example" on-click="example3()">bar</a> - 
 </div>
 
+</script>
+
+<script type="text/template" id="json-editor">
+  <textarea class="editor">{{queryText}}</textarea>
 </script>
 
 <script type="text/template" id="result-table">

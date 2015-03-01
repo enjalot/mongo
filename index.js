@@ -17,10 +17,13 @@ Intro.prototype.init = function(model) {
   model.ref("data", model.scope("_page.data"));
   model.ref("keys", model.scope("_page.keys"));
   model.set("limit", 10)
+  model.set("query", { city: "San Francisco"})
   //model.set("useTable", true)
 
   model.start("filtered", "data", "query", "limit", function(data, query, limit) {
-    return data.slice(0, limit)
+    var q = new Mingo.Query(query)
+    var cursor = q.find(data)
+    return cursor.limit(limit).all()
   })
   model.start("filteredText", "filtered", function(filtered) {
     return JSON.stringify(filtered, null, 2)
@@ -29,7 +32,30 @@ Intro.prototype.init = function(model) {
 Intro.prototype.toggleTable = function() {
   this.model.set("useTable", !this.model.get("useTable"))
 }
+Intro.prototype.example1 = function() {
+  this.model.set("query", {})
+}
+Intro.prototype.example2 = function() {
+  this.model.set("query", { city: "San Francisco"})
+}
+Intro.prototype.example3 = function() {
+  this.model.set("query", { city: "Shanghai"})
+}
 
+function Editor() {}
+Editor.prototype.init = function(model) {
+  model.set("queryText", JSON.stringify(model.get("query"), null, 2))
+  model.on("change", "queryText", function(text){
+    try {
+      var json = JSON.parse(text)
+      model.set("error", false)
+      model.set("query", json)
+    } catch(e) {
+      model.set("error", true)
+    }
+  })
+}
+app.component('json-editor', Editor);
 
 app.component('selectah', Selectah);
 function Selectah() {}
