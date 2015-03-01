@@ -16,21 +16,23 @@ function Intro() {}
 Intro.prototype.init = function(model) {
   model.ref("data", model.scope("_page.data"));
   model.ref("keys", model.scope("_page.keys"));
-  model.set("limit", 10)
+  model.set("limit", "10")
   model.set("query", { city: "San Francisco"})
   //model.set("useTable", true)
 
   model.start("filtered", "data", "query", "limit", function(data, query, limit) {
+    console.log("LIMIT", limit)
     var q = new Mingo.Query(query)
     var cursor = q.find(data)
-    return cursor.limit(limit).all()
+    return cursor.limit(+limit).all()
   })
   model.start("filteredText", "filtered", function(filtered) {
     return JSON.stringify(filtered, null, 2)
   })
 }
-Intro.prototype.toggleTable = function() {
-  this.model.set("useTable", !this.model.get("useTable"))
+
+Intro.prototype.toggle = function(path) {
+  this.model.set(path, !this.model.get(path))
 }
 Intro.prototype.example1 = function() {
   this.model.set("query", {})
@@ -42,20 +44,41 @@ Intro.prototype.example3 = function() {
   this.model.set("query", { city: "Shanghai"})
 }
 
+app.component('json-editor', Editor);
 function Editor() {}
 Editor.prototype.init = function(model) {
   model.set("queryText", JSON.stringify(model.get("query"), null, 2))
-  model.on("change", "queryText", function(text){
+  model.on("change", "queryText", function(newText, oldText, passed){
+    console.log("change text", oldText, newText, passed)
     try {
-      var json = JSON.parse(text)
+      //var json = JSON.parse(newText)
+      eval("var json = " + newText);
+      console.log("json", json)
       model.set("error", false)
-      model.set("query", json)
+      model.pass({"editor": true}).set("query", json)
     } catch(e) {
+      console.log(e)
       model.set("error", true)
     }
   })
+  model.on("change", "query", function(newQuery, oldQuery, passed) {
+    console.log("change query", oldQuery, newQuery, passed)
+    if(passed.editor) return;
+    model.pass({"editor": true}).set("queryText", JSON.stringify(model.get("query"), null, 2))
+
+
+  })
 }
-app.component('json-editor', Editor);
+
+
+app.component('pipeline', Pipeline);
+function Pipeline() {}
+Pipeline.prototype.init = function(model) {
+  model.set("match", { $match: { city: "San Francisco"}})
+}
+Pipeline.prototype.toggle = function(path) {
+  this.model.set(path, !this.model.get(path))
+}
 
 app.component('selectah', Selectah);
 function Selectah() {}

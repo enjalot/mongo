@@ -12,69 +12,121 @@
 <!-- we create a template to use as the body -->
 <script type="text/template" id="body">
 
-<h1>MongoDB Aggregation Explanations</h1>
-
 <div class="explain">
-  <p>
-  The MongoDB aggregation pipeline is a powerful tool with a powerful learning curve. This page attempts to explain the concepts involved by letting you play with some data.
-  </p>
+  <h1>MongoDB Aggregation Explanations</h1>
+  <div class="topic">
+    <p>
+    The <a href="http://docs.mongodb.org/manual/core/aggregation-pipeline/">MongoDB aggregation pipeline</a> is  
+     &nbsp; a powerful tool with a powerful learning curve. 
+    This page attempts to explain the concepts involved by letting you play with some data.
+    </p>
+  </div>
 
   <view is="intro"></view>
 
-  <h2>Aggregating</h2>
+  <view is="pipeline"></view>
 
-</div>
 
-<div class="post">
-  explanation by <a href="https://twitter.com/enjalot">@enjalot</a> with <a href="http://derbyjs.com">DerbyJS</a>
+  <div class="h2banner">
+    <h2>Thanks</h2>
+  </div>
+
+  <div class="post topic">
+    explanation by <a href="https://twitter.com/enjalot">@enjalot</a> with <a href="http://derbyjs.com">DerbyJS</a>
+  </div>
+
 </div>
 
 </script>
 
 <script type="text/template" id="intro">
-  <div class="intro">
-  <p>
-    The aggregation pipeline essentially lets you count things in a collection.
+{{console.log("hq", highlightQuery)}}
+  <div class="intro topic">
+    <div class="float-container">
+      <div>
+        <p>
+          The aggregation pipeline essentially lets you count things in a collection.
+          &nbsp; To explain how we aggregate with mongo we will need some sample data in a collection. 
+          <br><br>
+          Let us use XXX as our dataset, we can see &nbsp;
+          <a on-mouseover="toggle('highlightResult')" on-mouseout="toggle('highlightResult')" class="result">
+            {{filtered.length}} entries
+          </a>
+             &nbsp; out of {{data.length}} total documents. &nbsp;
 
-    So to explain how we aggregate with mongo we will need some sample data in a collection. 
-    <br><br>
-    Let us use XXX as our dataset, below is a sample of {{filtered.length}} entries out of {{data.length}}. &nbsp;
+          We can also view the data as <a on-click="toggle('useTable')">
+            {{if useTable}}JSON{{else}}a Table{{/if}}
+          </a>.
+        </p>
+        <p>
+          We can query our collection using the standard mongo query syntax. Try modifying &nbsp;
+           the <span on-mouseover="toggle('highlightQuery')" on-mouseout="toggle('highlightQuery')" class="query">query</span> below
+            &nbsp; to see the <span class="result" on-mouseover="toggle('highlightResult')" on-mouseout="toggle('highlightResult')">results</span> change.
+        </p>
 
-    We can also view the data as <a on-click="toggleTable()">
-      {{if useTable}}JSON{{else}}a Table{{/if}}
-    </a>.
-  </p>
-  <div class="intro-results">
-    
-    {{if useTable}}
-      <view is="result-table" data="{{filtered}}" keys="{{keys}}"></view>
-    {{else}}
-      <textarea class="json" wrap="off">{{filteredText}}</textarea>
-    {{/if}}
+        <view is="json-editor" query="{{query}}" highlight="{{highlightQuery}}"></view>
+        <p>
+          We limit the query to <input value="{{limit}}" size=3> results.
+          <br>
+          Try filtering on any of the keys available: 
+          {{each keys as #key}}
+            <span class="key">{{#key}} </span>
+          {{/each}}
+          <br>
+          Some example queries:
+          <a class="example" on-click="example1()">All entries</a> -
+          <a class="example" on-click="example2()">foo</a> - 
+          <a class="example" on-click="example3()">bar</a> 
+        </p>
+      </div>
+      <div class="intro-results float-right {{if highlightResult}}highlight-result{{/if}}">
+        {{if useTable}}
+          <view is="result-table" data="{{filtered}}" keys="{{keys}}"></view>
+        {{else}}
+          <textarea class="json" wrap="off">{{filteredText}}</textarea>
+        {{/if}}
+      </div>
+    </div>
   </div>
 
-  <h2>Filtering</h2>
-  <p>
-    We can query our collection using the standard mongo query syntax. Try modifying the query below to see the results change above.
-  </p>
-  <view is="json-editor" query="{{query}}"></view>
-  We limit the query to <input value="{{limit}}" size=3> results.
-  <br>
-  Try filtering on any of the keys available: 
-  {{each keys as #key}}
-    <span class="key">{{#key}} </span>
-  {{/each}}
-  <br>
-  Some example queries:
-  <a class="example" on-click="example1()">All entries</a> -
-  <a class="example" on-click="example2()">foo</a> - 
-  <a class="example" on-click="example3()">bar</a> - 
-</div>
 
 </script>
 
+<script type="text/template" id="pipeline">
+  <div class="h2banner">
+  <h2>pipeline</h2>
+  </div>
+  <div class="pipeline topic">
+
+    
+    <div class="float-container">  
+      <div class="float-right">
+        <img class="figure" src="./svg/match.svg">
+      </div>
+    </div>
+
+
+    <p>
+    The way you aggregate data in MongoDB is by specifying a list of commands that will process the data in a collection.
+    </p>
+      <p>
+       The reason it is called a pipeline is because data flows through it, going from one stage to the next.
+       &nbsp; There is a stage for each command, and it is helpful to think in terms of what goes into the stage and what comes out.
+      </p>
+      <p>
+      The entire collection goes into the first stage, and what comes out depends on which command you use.
+      &nbsp; Typically the first command is <span class="command">$match</span> because it lets you specify a <span class="query" on-mouseover="toggle('highlightQuery')" on-mouseout="toggle('highlightQuery')">
+      query</span>
+      </p>
+      <view is="json-editor" query="{{match}}" highlight="{{highlightQuery}}"></view>
+
+  </div>
+</script>
+
 <script type="text/template" id="json-editor">
-  <textarea class="editor">{{queryText}}</textarea>
+  <div class="editor-container {{if error}}error{{/if}} {{if highlight}}highlight{{/if}}">
+    <textarea class="editor">{{queryText}}</textarea>
+  </div>
 </script>
 
 <script type="text/template" id="result-table">

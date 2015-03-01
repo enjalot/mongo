@@ -1,15 +1,26 @@
 body {
   font-family: Helvetica, sans-serif;
+  font-size:14px;
+  line-height:1.5; 
 }
 h1 {
   width: 100%;
   text-align: center;
   margin-top: 20px;
 }
+*{
+  -moz-box-sizing:border-box;
+  -webkit-box-sizing:border-box;
+  box-sizing:border-box
+}
+
+
+
 .explain {
-  max-width: 800px;
-  margin: 20px auto;
-  padding: 20px;
+  max-width:1075px;
+  margin-left:auto;
+  margin-right:auto;
+  padding:0 40px
 }
 .post {
   width: 100%;
@@ -17,6 +28,144 @@ h1 {
   margin-top: 20px;
   padding: 20px;
 }
+
+/* borrowed from redblobgames.com */
+h2{
+  margin:20px 0;
+  padding:10px 40px;
+  font-size:20px;
+  max-width:410px;
+  border-bottom:1px solid #000;
+}
+h2 a.anchor{
+    float:right;
+    width:2em;
+    text-align:right;
+    color:#bf4040
+}
+h2:hover a.anchor{
+    color:#df9f9f
+}
+.topic{
+  margin-left:40px;
+  margin-right:40px;
+  margin-bottom:35px;
+  max-width:450px
+}
+.topic>img{
+  max-width:100%;
+  -ms-interpolation-mode:bicubic
+}
+.topic p,.topic li{
+  text-align:justify;
+  -moz-hyphens:auto;
+  -ms-hyphens:auto;
+  -webkit-hyphens:auto;
+  hyphens:auto
+}
+figure,code,pre{
+  -moz-hyphens:none;
+  -ms-hyphens:none;
+  -webkit-hyphens:none;
+  hyphens:none
+}
+pre{
+  max-width:450px;
+  line-height:1.4;
+  font-size:12px;
+  padding:4px 12px;
+  overflow:auto;
+  white-space:pre-wrap;
+  border-top:1px solid #ccc;
+  border-bottom:1px solid #ccc;
+  border-left-width:0;
+  border-right-width:0
+}
+pre::-webkit-scrollbar{
+  height:1em
+}
+pre::-webkit-scrollbar-thumb:horizontal{
+  border-radius:0.5em;
+  background:rgba(0,0,0,0.4)
+}
+ul pre,ol pre{
+  width:450px
+}
+pre.snippet,pre.src{
+  border-top-style:dashed;
+  border-bottom-style:dashed
+}
+.topic>pre:only-child{
+  padding-bottom:14px;
+  border-bottom:1px solid rgba(0,0,0,0.5)
+}
+@media only screen and (max-width: 700px){
+  .explain{
+    padding:0 10px
+  }
+  .topic{
+    margin-left:10px;
+    margin-right:10px
+  }
+  h2{
+    max-width:400px
+  }
+  pre{
+    font-size:10px
+  }
+}
+
+@media only screen and (max-width: 600px){
+  h1{
+    text-align:center;
+    font-size:14px;
+    padding:14px
+  }
+  .omit-if-narrow{
+    display:none
+  }
+  pre{
+    width:auto;
+    font-size:9px
+  }
+}
+
+@media only screen and (min-width: 1075px) {
+  div.topic {
+    max-width: 1075px;
+  }
+  div.topic > * {
+    max-width: 450px;
+  }
+  div.topic .wide-container {
+    max-width: 1075px;
+  }
+  div.topic .float-container {
+    max-width: inherit;
+  }
+}
+.h2banner {
+  margin-top: 30px;
+}
+.h2banner, h2, h3, .float-container {
+  clear: both;
+}
+.float-container > * {
+  float: left;
+  clear: left;
+  width: 450px;
+}
+.float-container > .float-right {
+  float: right;
+  clear: right;
+  margin-top: 0;
+}
+.float-container > p:first-child, .float-container > div:first-child > p:first-child {
+  /* Hack to deal with margin outside float not overlapping with margin inside float */
+  margin-top: 0;
+}
+
+
 .json {
   width: 100%;
   height: 100%;
@@ -31,6 +180,22 @@ h1 {
   height: 80px;
   font-family: Courier, monospace;
   font-size: 20px;
+  outline:none;
+}
+.editor-container {
+  padding-bottom: 4px;
+}
+.editor-container.error {
+  border-bottom:4px solid red;
+  padding-bottom: 0px;
+}
+span.query {
+  color: green;
+  font-weight: bold;
+}
+.editor-container.highlight {
+  border-bottom: 4px solid green;
+  padding-bottom: 0px;
 }
 table.results {
   display: block;
@@ -43,16 +208,48 @@ table.results td {
   padding: 2px 5px;
 }
 
+input {
+  outline: none;
+}
 
 .intro-results {
+  /*
   width: 100%;
-  height: 300px;
+  */
+  padding: 5px;
+  height: 400px;
   overflow-y: scroll;
+  border: 1px solid orange;
 }
+.highlight-result {
+  border: 2px solid orange;
+  padding: 4px;
+}
+
+.result {
+  color: orange;
+}
+.result:hover {
+  border-bottom: 1px solid orange;
+}
+.result:hover ~ .intro-results {
+  border: 5px solid orange;
+}
+
 .key {
   background: #eee;
   margin: 5px;
 }
 a.example {
   margin: 5px;
+}
+
+/* PIPELINE */
+
+.command {
+  color: red;
+  font-weight: bold;
+}
+.pipeline .editor {
+  height: 110px;
 }
